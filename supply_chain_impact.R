@@ -1,5 +1,5 @@
 # Global Supply Chain Shock Analysis
-# Exploring the economic impacts of geopolitical conflicts using public data
+# Focusing on Current Geopolitical Disruptions & Middle East Transit Risks
 
 # Load required libraries
 library(tidyverse)
@@ -11,55 +11,53 @@ fred_freight_url <- "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCU48311
 print("Initializing data connection to FRED API...")
 freight_data <- read_csv(fred_freight_url)
 
-# Clean and rename columns using the correct source column name: observation_date
-freight_clean <- freight_data %>%
+# Clean, rename, and FILTER for current ongoing timeline (2022 - 2026)
+freight_filtered <- freight_data %>%
   rename(Date = observation_date, Shipping_Cost_Index = PCU483111483111) %>%
   mutate(
     Date = as.Date(Date),
     Shipping_Cost_Index = as.numeric(Shipping_Cost_Index)
   ) %>%
+  filter(Date >= as.Date("2022-01-01")) %>%  # Focuses strictly on recent/ongoing era
   drop_na()
 
-print("Generating high-impact supply chain visualization...")
+print("Generating focused current-conflict supply chain visualization...")
 
-# Plotting the historical freight rate shocks
-ggplot(freight_clean, aes(x = Date, y = Shipping_Cost_Index)) +
-  geom_line(color = "#1f77b4", linewidth = 1) +  
+# Plotting the ongoing freight rate shocks
+ggplot(freight_filtered, aes(x = Date, y = Shipping_Cost_Index)) +
+  geom_line(color = "#1f77b4", linewidth = 1.2) +  
   
   # NEW FEATURE: US-03 Risk Threshold Boundary Line at 350
   geom_hline(yintercept = 350, linetype = "dashed", color = "red", linewidth = 1) +
   
   # NEW FEATURE: US-03 Dynamic Alert Highlights (Adds red dots for outliers)
-  geom_point(data = filter(freight_clean, Shipping_Cost_Index > 350), 
-             color = "red", size = 2, alpha = 0.8) +
+  geom_point(data = filter(freight_filtered, Shipping_Cost_Index > 350), 
+             color = "red", size = 2.5, alpha = 0.9) +
   
-  # Highlight: 2020-2022 Pandemic Supply Chain Crisis
-  annotate("rect", xmin = as.Date("2020-03-01"), xmax = as.Date("2022-06-01"), 
-           ymin = -Inf, ymax = Inf, alpha = 0.15, fill = "red") +  
-  annotate("text", x = as.Date("2021-04-01"), y = 430, 
-           label = "Pandemic Shock & \nGlobal Port Gridlock", color = "red", size = 3.5, fontface = "bold") +
+  # NEW FOCUS: Ongoing Iran / Red Sea / Strait of Hormuz Maritime Disruptions
+  annotate("rect", xmin = as.Date("2023-11-01"), xmax = as.Date("2026-05-01"), 
+           ymin = -Inf, ymax = Inf, alpha = 0.15, fill = "darkorange") +  
+  annotate("text", x = as.Date("2025-01-01"), y = 390, 
+           label = "Ongoing Middle East Maritime Shocks:\nStrait of Hormuz & Red Sea Threats", 
+           color = "darkorange4", size = 4, fontface = "bold") +
   
-  # Highlight: Recent Maritime Geopolitical Crises (e.g., Red Sea Disruptions)
-  annotate("rect", xmin = as.Date("2024-01-01"), xmax = as.Date("2026-04-01"), 
-           ymin = -Inf, ymax = Inf, alpha = 0.15, fill = "orange") +  
-  annotate("text", x = as.Date("2025-01-01"), y = 350, 
-           label = "Geopolitical \nShipping Corridors Shocks", color = "darkorange3", size = 3.5, fontface = "bold") +
-  
-  # Professional styling
+  # Professional styling optimized for a shorter, intense timeline
   theme_minimal(base_size = 12) +
+  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") + # Cleaner axis spacing
   labs(
-    title = "Deep Sea Freight Cost Index (1988 - 2026)",
-    subtitle = "Visualizing Global Macroeconomic Supply Chain Shocks & Geopolitical Disruptions",
-    x = "Timeline",
+    title = "Current Deep Sea Freight Cost Volatility (2022 - 2026)",
+    subtitle = "Monitoring Shipping Rate Shocks Tied to Iran Regional Conflict & Geopolitical Choke Points",
+    x = "Recent Timeline",
     y = "Producer Price Index (Base = 100)",
-    caption = "Data Source: St. Louis FRED (Series: PCU483111483111) | Analysis Portfolio"
+    caption = "Data Source: St. Louis FRED (Series: PCU483111483111) | Operations Risk Portfolio"
   ) +
   theme(
-    plot.title = element_text(face = "bold", size = 16, color = "#333333"),
-    plot.subtitle = element_text(size = 11, color = "#666666"),
+    plot.title = element_text(face = "bold", size = 15, color = "#111111"),
+    plot.subtitle = element_text(size = 11, color = "#555555"),
+    axis.text.x = element_text(angle = 45, hjust = 1), # Rotates dates so they don't overlap
     panel.grid.minor = element_blank()
   )
 
-# Save the generated chart image to your local repository folder
+# Save the focused chart image to your local repository folder
 ggsave("supply_chain_shocks_plot.png", width = 10, height = 6, dpi = 300)
-print("Analysis complete! Plot saved as 'supply_chain_shocks_plot.png'.")
+print("Analysis complete! Focused plot saved as 'supply_chain_shocks_plot.png'.")
