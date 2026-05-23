@@ -24,17 +24,24 @@ print("Generating high-impact supply chain visualization...")
 
 # Plotting the historical freight rate shocks
 ggplot(freight_clean, aes(x = Date, y = Shipping_Cost_Index)) +
-  geom_line(color = "#1f77b4", linewidth = 1) +  # Updated 'size' to 'linewidth'
+  geom_line(color = "#1f77b4", linewidth = 1) +  
+  
+  # NEW FEATURE: US-03 Risk Threshold Boundary Line at 350
+  geom_hline(yintercept = 350, linetype = "dashed", color = "red", linewidth = 1) +
+  
+  # NEW FEATURE: US-03 Dynamic Alert Highlights (Adds red dots for outliers)
+  geom_point(data = filter(freight_clean, Shipping_Cost_Index > 350), 
+             color = "red", size = 2, alpha = 0.8) +
   
   # Highlight: 2020-2022 Pandemic Supply Chain Crisis
   annotate("rect", xmin = as.Date("2020-03-01"), xmax = as.Date("2022-06-01"), 
-           ymin = -Inf, ymax = Inf, alpha = 0.15, fill = "red") +  # Capitalized 'Inf'
+           ymin = -Inf, ymax = Inf, alpha = 0.15, fill = "red") +  
   annotate("text", x = as.Date("2021-04-01"), y = 430, 
            label = "Pandemic Shock & \nGlobal Port Gridlock", color = "red", size = 3.5, fontface = "bold") +
   
   # Highlight: Recent Maritime Geopolitical Crises (e.g., Red Sea Disruptions)
   annotate("rect", xmin = as.Date("2024-01-01"), xmax = as.Date("2026-04-01"), 
-           ymin = -Inf, ymax = Inf, alpha = 0.15, fill = "orange") +  # Capitalized 'Inf'
+           ymin = -Inf, ymax = Inf, alpha = 0.15, fill = "orange") +  
   annotate("text", x = as.Date("2025-01-01"), y = 350, 
            label = "Geopolitical \nShipping Corridors Shocks", color = "darkorange3", size = 3.5, fontface = "bold") +
   
