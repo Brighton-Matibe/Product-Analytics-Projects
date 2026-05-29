@@ -44,3 +44,16 @@ This product is managed using Scrum frameworks to ensure iterative value deliver
 | **Sprint 1** | US-03 | Visual Risk Thresholds | Draw horizontal alert baselines and highlight outlying data spikes. | **Done** |
 | **Sprint 2** | US-02 | Interactive HTML Tooltips | Transition static plots to interactive `plotly` charts for precise coordinate hover. | *Todo* |
 | **Sprint 2** | US-04 | Multi-Series Energy Ingestion | Plot Global Bunker Fuel Prices alongside shipping rates to map cost drivers. | *Todo* |
+
+---
+
+## 🛠️ Data Infrastructure & Back-End Architecture (SQL)
+
+To power high-visibility operational dashboards, raw transactional logistics tables must be transformed into clean, optimized analytical data layers. 
+
+I engineered a production-grade optimization script found directly in [`warehouse_lead_time_analytics.sql`](./warehouse_lead_time_analytics.sql) utilizing advanced SQL strategies to process shipping milestones:
+
+* **Multi-Layered Common Table Expressions (CTEs):** Built to isolate metrics and maintain high-performance query execution by separating initial delta tracking from window partitioning logic.
+* **Analytical Window Functions (`AVG() OVER`):** Calculates a rolling 5-shipment moving average delay index partitioned by specific vendors. This allows the product to differentiate between a random transit anomaly and a structural supplier bottleneck.
+* **Forward-Looking Cost Projections (`LEAD()`):** Measures pricing volatility and trends by matching current container shipment costs against the next scheduled lane asset.
+* **Conditional Risk Categorization (`CASE WHEN`):** Implements automated warehouse alert flags (`CRITICAL DELAY`, `WARNING`, `OPTIMIZED`) to feed live visualization alerts when lead-time variances breach risk thresholds.
