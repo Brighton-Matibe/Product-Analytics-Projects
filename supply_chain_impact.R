@@ -62,3 +62,57 @@ ggplot(us_impact_data, aes(x = Date, y = US_Inbound_Freight_Index)) +
 # Save the USA-focused chart image to your local folder
 ggsave("supply_chain_shocks_plot.png", width = 10, height = 6, dpi = 300)
 print("Analysis complete! USA operational impact plot saved.")
+
+
+# ====================================================================
+# Phase 3: Applied AI - Predictive Supply Chain Lead-Time Anomalies (Regression)
+# Objective: Train a predictive model to forecast shipment arrival delays
+# ====================================================================
+
+# Load core machine learning libraries
+if(!require(tidymodels)) install.packages("tidymodels")
+library(tidymodels)
+
+# 1. Simulate a Production Logistics Ledger Dataset (1,000 Shipments)
+set.seed(123)
+n_shipments <- 1000
+
+logistics_data <- tibble(
+  shipment_id              = 1:n_shipments,
+  estimated_lead_time_days = sample(14:30, n_shipments, replace = TRUE),
+  macro_freight_index_cost = runif(n_shipments, min = 1500, max = 4500), # Simulating FRED market volatility
+  historical_supplier_error= runif(n_shipments, min = 0, max = 5),        # Supplier past average delay
+  # Noise + Logic: High macro costs and bad supplier history create longer actual delays
+  actual_delay_days        = (macro_freight_index_cost * 0.001) + (historical_supplier_error * 0.8) + rnorm(n_shipments, mean = 0, sd = 1)
+)
+
+# Enforce realistic bounds (cannot have negative days of delay)
+logistics_data$actual_delay_days <- ifelse(logistics_data$actual_delay_days < 0, 0, logistics_data$actual_delay_days)
+
+# 2. Data Splitting (Training vs Testing Sets)
+# Split 80% to train the predictive engine, 20% to validate its forecasts
+logistics_split <- initial_split(logistics_data, prop = 0.80)
+sc_train_set    <- training(logistics_split)
+sc_test_set     <- testing(logistics_split)
+
+# 3. Model Architecture Specification
+# Defining a linear regression machine learning model utilizing the standard lm engine
+reg_model <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  set_mode("regression")
+
+# 4. Training the AI Model (Fitting)
+reg_fit <- reg_model %>% 
+  fit(actual_delay_days ~ estimated_lead_time_days + macro_freight_index_cost + historical_supplier_error, data = sc_train_set)
+
+# 5. Evaluate Model Performance on Unseen Test Shipments
+sc_predictions <- predict(reg_fit, new_data = sc_test_set) %>% 
+  bind_cols(sc_test_set)
+
+# Calculate R-Squared and RMSE (Industry standard metrics for checking regression accuracy)
+sc_metrics <- metrics(sc_predictions, truth = actual_delay_days, estimate = .pred)
+print(sc_metrics)
+
+# 6. Extract Feature Importance Metrics
+regression_weights <- tidy(reg_fit)
+print(regression_weights)
