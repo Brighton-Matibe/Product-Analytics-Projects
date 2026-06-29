@@ -48,7 +48,6 @@ This product is managed using Scrum frameworks to ensure iterative value deliver
 ---
 
 ## 🛠️ Data Infrastructure & Back-End Architecture (SQL)
-
 To power high-visibility operational dashboards, raw transactional logistics tables must be transformed into clean, optimized analytical data layers. 
 
 I engineered a production-grade optimization script found directly in [`warehouse_lead_time_analytics.sql`](./warehouse_lead_time_analytics.sql) utilizing advanced SQL strategies to process shipping milestones:
@@ -61,7 +60,6 @@ I engineered a production-grade optimization script found directly in [`warehous
 ---
 
 ## 🤖 Phase 3: Applied AI - Predictive Lead-Time & Transit Delay Modeling
-
 To elevate this project from a historical tracking system into a proactive, forward-looking operational radar, I integrated a predictive Machine Learning forecasting layer into the analytics data pipeline.
 
 ### 1. Technical Architecture & Ingestion
@@ -71,7 +69,7 @@ I constructed a **Linear Regression Predictive Model** using the `tidymodels` co
 
 ### 2. Operational Evaluation Metrics
 The regression engine was rigorously evaluated using industry-standard predictive error benchmarks:
-* **R-Squared ($R^2$ Variance Explained):** The model demonstrates high explanatory validity ($R^2 > 0.82$), proving that over 82% of transit delay variability can be successfully predicted by combining internal operational telemetry with external macroeconomic indicators.
+* **R-Squared (R² Variance Explained):** The model demonstrates high explanatory validity (**R² > 0.82**), proving that over 82% of transit delay variability can be successfully predicted by combining internal operational telemetry with external macroeconomic indicators.
 * **Root Mean Squared Error (RMSE):** Maintained minimal deviation variance, indicating that the model’s predicted arrival window maps precisely within a narrow margin of actual operational delivery times.
 
 ### 💼 Operational Product Owner Application
@@ -83,6 +81,6 @@ By injecting this AI engine directly into the data architecture, supply chain ma
 ### Shifting Operations from Reactive Debugging to Predictive Inventory Management
 As a Product Owner and Business Analyst, technical code configurations must directly translate into bottom-line corporate financial value ($ROI, EBITDA, Cash Flow$). The predictive linear regression engine engineered within this platform moves the enterprise past manual data tracking and anchors data infrastructure directly to corporate profitability:
 
-* **Margin Optimization & Revenue Protection:** By predicting exact transit lead-time delay windows with high confidence ($R^2 > 0.82$), global operations units can dynamically re-route supply paths, eliminating costly factory downtime and warehouse processing overruns.
+* **Margin Optimization & Revenue Protection:** By predicting exact transit lead-time delay windows with high confidence (**R² > 0.82**), global operations units can dynamically re-route supply paths, eliminating costly factory downtime and warehouse processing overruns.
 * **Cash Flow Preservation:** Automated alerting based on multi-layered SQL data modeling allows the finance department to optimize working capital allocations, adjusting safety stock parameters accurately to protect capital liquidity.
 * **Elimination of Obsolete Inventory Write-Downs:** Bridging the structural gap between FRED freight cost indices and historic supplier telemetry prevents inventory hoarding, directly stopping bottom-line margin erosion from obsolete materials write-downs.
